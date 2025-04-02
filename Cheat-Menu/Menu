@@ -178,6 +178,7 @@
                 <button id="setBounty">Set Bounty Points</button>
                 <button id ="dark">Set Dark Tower Floor</button>
                 <button id="completeQuest">Complete Current Task In Quest</button>
+                <button id="achievements">Get All Achievements</button>
                 <button id="changeName">Change Name</button>
                 <button id="setName">Set Name (Client-Side Only)</button>
                 <button id="setGrade">Set Grade</button>
