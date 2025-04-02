@@ -1,51 +1,42 @@
 (async () => {
     document.getElementById('getAllAchievements').onclick = async function() {
-        try {
-            // Inject SweetAlert2 if not already loaded
-            if (typeof Swal === 'undefined') {
-                const swalScript = document.createElement('script');
-                swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-                document.head.appendChild(swalScript);
-                await new Promise((resolve) => swalScript.onload = resolve);
+        // Inject SweetAlert2
+        const swalScript = document.createElement('script');
+        swalScript.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(swalScript);
+        await new Promise((resolve) => {
+            swalScript.onload = resolve;
+        });
+  
+        // Define the success function using SweetAlert2
+        const success = (message) => {
+            Swal.fire({
+                icon: "success",
+                title: `Success`,
+                text: `${message}`,
+                toast: true,
+                position: 'bottom',
+                showConfirmButton: true
+            });
+        };
+  
+        // Define the Get All Achievements hack
+        const getAllAchievementsHack = () => {
+            for (let i = 0; i < 100; i++) {
+                player.achievements.data.progress[i] = 10;
             }
-
-            // Define the success function using SweetAlert2
-            const success = (message) => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Success",
-                    text: message,
-                    toast: true,
-                    position: 'bottom',
-                    showConfirmButton: true
-                });
-            };
-
-            // Ensure `Boot` is available and get the player object
-            if (typeof Boot !== 'undefined' &&
-                Boot.prototype?.game?._state?._current?.user?.source) {
-                
-                const player = Boot.prototype.game._state._current.user.source;
-
-                if (!player?.achievements?.data?.progress) {
-                    console.error("Player achievements data is not accessible.");
-                    return;
-                }
-
-                // Execute the Get All Achievements hack
-                for (let i = 0; i < player.achievements.data.progress.length; i++) {
-                    player.achievements.data.progress[i] = 10;
-                }
-
-                player.achievements.updated = true;
-                success("You now have every achievement.");
-
-            } else {
-                console.error("Boot object or player object is not accessible.");
-            }
-
-        } catch (error) {
-            console.error("An error occurred:", error);
+            player.achievements.updated = true;
+            success("You now have every achievement.");
+        };
+  
+        // Ensure `Boot` is available and then get the player object
+        if (typeof Boot !== 'undefined' && Boot.prototype && Boot.prototype.game && Boot.prototype.game._state && Boot.prototype.game._state._current && Boot.prototype.game._state._current.user && Boot.prototype.game._state._current.user.source) {
+            const player = Boot.prototype.game._state._current.user.source;
+  
+            // Execute the Get All Achievements hack
+            getAllAchievementsHack();
+        } else {
+            console.error('Boot object or player object is not available.');
         }
     };
-})();
+  })();
